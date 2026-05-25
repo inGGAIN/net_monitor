@@ -10,6 +10,11 @@ fn main() {
     println!("Membaca data dari stdin...");
     println!("Program ini siap menerima input manual atau input dari pipe.");
     println!();
+
+    let blocked_domains = blocked_domain::load_blocked_domains("blocked_domains.txt");
+
+    println!("Loaded {} blocked domains", blocked_domains.len());
+    println!();
     println!("Contoh manual:");
     println!("query A youtube.com");
     println!();
@@ -30,13 +35,13 @@ fn main() {
         };
 
         if let Some(domain) = domain_parser::extract_domain(&text) {
-            process_domain(&domain);
+            process_domain(&domain, &blocked_domains);
         }
     }
 }
 
-fn process_domain(domain: &str) {
-    let status = if blocked_domain::is_blocked_domain(domain) {
+fn process_domain(domain: &str, blocked_domains: &[String]) {
+    let status = if blocked_domain::is_blocked_domain(domain, blocked_domains) {
         "BLOCKED"
     } else {
         "ALLOWED"
