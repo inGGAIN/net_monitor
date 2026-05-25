@@ -1,3 +1,4 @@
 /target
 *.log
 network_log.txt
+samples_dns.log
